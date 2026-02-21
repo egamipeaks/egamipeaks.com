@@ -22,7 +22,7 @@ class AssetUploadService
         $extension = $file->getClientOriginalExtension();
         $path = 'uploads/'.now()->format('Y-m').'/'.\Illuminate\Support\Str::uuid().'.'.$extension;
 
-        Storage::disk($disk)->put($path, $contents);
+        Storage::disk($disk)->put($path, $contents, ['visibility' => 'public']);
 
         return Asset::create([
             'disk' => $disk,
