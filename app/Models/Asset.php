@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Asset extends Model
 {
@@ -24,5 +25,20 @@ class Asset extends Model
         return [
             'metadata' => 'array',
         ];
+    }
+
+    public function getUrlAttribute(): ?string
+    {
+        $cdnUrl = config("filesystems.disks.{$this->disk}.cdn_url");
+
+        if ($cdnUrl) {
+            return rtrim($cdnUrl, '/').'/'.ltrim($this->path, '/');
+        }
+
+        try {
+            return Storage::disk($this->disk)->temporaryUrl($this->path, now()->addHour());
+        } catch (\Exception) {
+            return null;
+        }
     }
 }

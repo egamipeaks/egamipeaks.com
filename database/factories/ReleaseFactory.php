@@ -26,6 +26,11 @@ class ReleaseFactory extends Factory
         ];
     }
 
+    public function draft(): static
+    {
+        return $this->state(['visibility' => Visibility::Draft]);
+    }
+
     public function public(): static
     {
         return $this->state(['visibility' => Visibility::Public]);

@@ -1,7 +1,13 @@
 <?php
 
-it('returns a successful response', function () {
-    $response = $this->get('/');
+use App\Models\Artist;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-    $response->assertStatus(200);
+uses(RefreshDatabase::class);
+
+it('returns a successful response', function () {
+    Artist::factory()->create();
+
+    $this->get('/')
+        ->assertSuccessful();
 });

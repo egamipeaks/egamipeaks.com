@@ -71,6 +71,7 @@ return [
             'visibility' => 'private',
             'throw' => false,
             'report' => false,
+            'cdn_url' => env('DO_SPACES_CDN_URL', null),
         ],
 
     ],
