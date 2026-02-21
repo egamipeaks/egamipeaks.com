@@ -6,12 +6,19 @@ use App\Models\Artist;
 use App\Models\Release;
 use App\Models\Tag;
 use App\Models\Track;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        User::factory()->create([
+            'name' => 'Admin',
+            'email' => 'admin@egamipeaks.com',
+            'password' => bcrypt('password'),
+        ]);
+
         $artist = Artist::factory()->create(['name' => 'egamipeaks']);
 
         $electronic = Tag::factory()->create(['name' => 'Electronic']);
