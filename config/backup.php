@@ -16,7 +16,7 @@ return [
                  * We include the SQLite database file directly to avoid requiring the sqlite3 CLI.
                  */
                 'include' => [
-                    database_path('database.sqlite'),
+                    config('database.connections.sqlite.database'),
                 ],
 
                 /*
