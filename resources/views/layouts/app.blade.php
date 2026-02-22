@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@hasSection('title') @yield('title') — {{ config('app.name') }} @else {{ config('app.name') }} @endif</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=space-mono:400,700" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-950 text-gray-100 font-sans antialiased min-h-screen flex flex-col">
-    <nav class="border-b border-gray-800 px-6 py-4">
+<body class="bg-[#f5f3f0] text-[#1a1a1a] font-sans min-h-screen flex flex-col">
+    <nav class="border-b-2 border-[#1a1a1a] px-6 py-4">
         <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <a href="{{ route('home') }}" class="text-lg font-semibold tracking-tight hover:text-white transition-colors">
+            <a href="{{ route('home') }}" class="text-lg font-bold uppercase tracking-widest hover:text-[#1da0c3] transition-colors">
                 {{ config('app.name') }}
             </a>
-            <a href="{{ route('releases.index') }}" class="text-sm text-gray-400 hover:text-white transition-colors">
+            <a href="{{ route('releases.index') }}" class="text-sm hover:text-[#1da0c3] transition-colors">
                 Releases
             </a>
         </div>
@@ -24,8 +24,8 @@
         @yield('content')
     </main>
 
-    <footer class="border-t border-gray-800 px-6 py-8 mt-16">
-        <div class="max-w-6xl mx-auto text-center text-sm text-gray-500">
+    <footer class="border-t-2 border-[#1a1a1a] px-6 py-8 mt-16">
+        <div class="max-w-6xl mx-auto text-sm text-[#6b6b6b]">
             &copy; {{ date('Y') }} {{ config('app.name') }}
         </div>
     </footer>
