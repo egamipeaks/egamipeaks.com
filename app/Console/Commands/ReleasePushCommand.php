@@ -71,7 +71,7 @@ class ReleasePushCommand extends Command
             $this->buildSshOptions($key),
             [
                 "{$user}@{$host}",
-                "php {$remotePath}/artisan release:import {$remoteFile} && rm -f {$remoteFile}",
+                "cd {$remotePath}/current && php artisan release:import {$remoteFile} && rm -f {$remoteFile}",
             ]
         );
 
