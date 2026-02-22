@@ -16,7 +16,7 @@ return [
                  * We include the SQLite database file directly to avoid requiring the sqlite3 CLI.
                  */
                 'include' => [
-                    config('database.connections.sqlite.database'),
+                    env('DB_DATABASE'),
                 ],
 
                 /*
