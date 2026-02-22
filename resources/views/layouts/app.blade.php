@@ -14,9 +14,6 @@
             <a href="{{ route('home') }}" class="text-lg font-bold uppercase tracking-widest hover:text-[#1da0c3] transition-colors">
                 {{ config('app.name') }}
             </a>
-            <a href="{{ route('releases.index') }}" class="text-sm hover:text-[#1da0c3] transition-colors">
-                Releases
-            </a>
         </div>
     </nav>
 

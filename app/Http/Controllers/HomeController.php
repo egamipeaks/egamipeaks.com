@@ -11,13 +11,11 @@ class HomeController extends Controller
     {
         $artist = Artist::query()->with('heroImage')->firstOrFail();
 
-        $recentReleases = $artist->releases()
+        $releases = $artist->releases()
             ->public()
             ->with('coverAsset')
-            ->orderByDesc('release_date')
-            ->limit(6)
             ->get();
 
-        return view('home', compact('artist', 'recentReleases'));
+        return view('home', compact('artist', 'releases'));
     }
 }
