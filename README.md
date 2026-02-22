@@ -1,59 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# egamipeaks.com
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Music release management site built with Laravel 12 + Filament 5.
 
-## About Laravel
+## Requirements
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- PHP 8.4
+- Composer
+- Node.js / npm
+- SQLite (local dev)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Setup
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+composer install
+npm install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
+npm run build
+```
 
-## Learning Laravel
+Admin login (after seeding): `admin@egamipeaks.com` / `password`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Custom Artisan Commands
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### `import-release`
 
-## Laravel Sponsors
+Import a folder of MP3 files as a new Release with Tracks. Reads song title, track number, duration, and embedded cover art from ID3 tags. Artist and release title are collected interactively.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+php artisan import-release "/path/to/mp3 folder"
+```
 
-### Premium Partners
+Prompts:
+1. **Release title** — defaults to the folder name
+2. **Release date** — optional, YYYY-MM-DD format
+3. **Artist** — choose from existing artists or create a new one
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+### `release:export`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Export a release (artist, tracks, assets) to a JSON file at `storage/app/exports/release-{slug}.json`. Used as the first step of `release:push`.
 
-## Code of Conduct
+```bash
+php artisan release:export <id-or-slug>
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+### `release:import`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Import a release from a JSON export file, upserting all records (artist, assets, release, tracks). Used on production after `release:push` uploads the file.
 
-## License
+```bash
+php artisan release:import /path/to/release-slug.json
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+### `release:push`
+
+Full pipeline: exports the release locally → SCPs the JSON file to production → runs `release:import` on the remote server.
+
+```bash
+php artisan release:push <id-or-slug>
+```
+
+Requires SSH config in `.env`:
+
+```env
+PROD_SSH_HOST=your-server.com
+PROD_SSH_USER=forge
+PROD_SSH_PATH=/home/forge/egamipeaks.com
+PROD_SSH_KEY=/path/to/private-key   # optional
+```
+
+---
+
+### `db:pull`
+
+Pull the production SQLite database down to your local environment, overwriting `database/database.sqlite`.
+
+```bash
+php artisan db:pull
+```
+
+Uses the same SSH config as `release:push`. Prompts for confirmation before overwriting.
+
+---
+
+## Development
+
+```bash
+composer run dev   # starts server + queue + logs
+php artisan test --compact
+vendor/bin/pint    # code style fixer
+```

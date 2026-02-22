@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'prod_ssh' => [
+        'host' => env('PROD_SSH_HOST'),
+        'user' => env('PROD_SSH_USER', 'forge'),
+        'key' => env('PROD_SSH_KEY'),
+        'path' => env('PROD_SSH_PATH', '/home/forge/egamipeaks.com'),
+    ],
+
 ];

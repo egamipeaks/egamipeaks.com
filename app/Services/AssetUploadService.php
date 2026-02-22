@@ -32,4 +32,29 @@ class AssetUploadService
             'sha256' => $sha256,
         ]);
     }
+
+    public function uploadFromPath(string $localPath, string $mime, string $disk = 'spaces'): Asset
+    {
+        $contents = file_get_contents($localPath);
+        $sha256 = hash('sha256', $contents);
+
+        $existing = Asset::query()->where('sha256', $sha256)->first();
+
+        if ($existing) {
+            return $existing;
+        }
+
+        $extension = pathinfo($localPath, PATHINFO_EXTENSION);
+        $path = 'uploads/'.now()->format('Y-m').'/'.\Illuminate\Support\Str::uuid().'.'.$extension;
+
+        Storage::disk($disk)->put($path, $contents, ['visibility' => 'public']);
+
+        return Asset::create([
+            'disk' => $disk,
+            'path' => $path,
+            'mime' => $mime,
+            'bytes' => strlen($contents),
+            'sha256' => $sha256,
+        ]);
+    }
 }
