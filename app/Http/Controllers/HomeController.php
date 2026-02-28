@@ -14,6 +14,7 @@ class HomeController extends Controller
         $releases = $artist->releases()
             ->public()
             ->with('coverAsset')
+            ->latest('release_date')
             ->get();
 
         return view('home', compact('artist', 'releases'));
