@@ -11,8 +11,13 @@
 <body class="bg-[#f5f3f0] text-[#1a1a1a] font-sans min-h-screen flex flex-col">
     <nav class="border-b-2 border-[#1a1a1a] px-6 py-4">
         <div class="max-w-6xl mx-auto flex items-center justify-between">
-            <a href="{{ route('home') }}" class="text-lg font-bold uppercase tracking-widest hover:text-[#1da0c3] transition-colors">
-                {{ config('app.name') }}
+            <a href="{{ route('home') }}" class="group flex flex-col leading-tight">
+                <span class="text-lg font-bold uppercase tracking-widest text-[#1a1a1a] group-hover:text-[#1da0c3] transition-colors">
+                    {{ config('app.name') }}
+                </span>
+                <span class="text-xs text-[#6b6b6b] tracking-wide">
+                    Music by Andrew Krzynowek
+                </span>
             </a>
         </div>
     </nav>

@@ -12,7 +12,8 @@ class HomeController extends Controller
     {
         $releases = Release::query()
             ->public()
-            ->with('coverAsset')
+            ->with(['coverAsset', 'artist'])
+            ->withCount('tracks')
             ->latest('release_date')
             ->get();
 
