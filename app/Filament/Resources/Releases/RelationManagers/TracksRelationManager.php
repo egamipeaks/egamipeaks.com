@@ -41,6 +41,7 @@ class TracksRelationManager extends RelationManager
                     ->columnSpanFull(),
                 FileUpload::make('audio_asset_id')
                     ->acceptedFileTypes(['audio/mpeg', 'audio/mp3', 'audio/wav', 'audio/flac', 'audio/ogg', 'audio/aac'])
+                    ->maxSize(102400)
                     ->visibility('public')
                     ->saveUploadedFileUsing(function ($file) {
                         $asset = app(AssetUploadService::class)->upload($file);

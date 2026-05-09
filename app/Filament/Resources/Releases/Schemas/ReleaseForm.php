@@ -51,6 +51,7 @@ class ReleaseForm
                         FileUpload::make('cover_asset_id')
                             ->image()
                             ->imageEditor()
+                            ->maxSize(102400)
                             ->visibility('public')
                             ->saveUploadedFileUsing(function ($file) {
                                 $asset = app(AssetUploadService::class)->upload($file);
