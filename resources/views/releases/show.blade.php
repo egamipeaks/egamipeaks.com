@@ -13,6 +13,31 @@
 
     <div class="px-6">
     <div class="max-w-6xl mx-auto py-16 pb-32 space-y-10">
+        {{-- Release navigation --}}
+        @if($olderRelease || $newerRelease)
+            <nav class="flex items-center justify-between gap-4 text-sm" aria-label="Release navigation">
+                @if($olderRelease)
+                    <a href="{{ route('releases.show', $olderRelease->slug) }}"
+                       class="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">
+                        <span>&larr;</span>
+                        <span>Older</span>
+                    </a>
+                @else
+                    <span></span>
+                @endif
+
+                @if($newerRelease)
+                    <a href="{{ route('releases.show', $newerRelease->slug) }}"
+                       class="inline-flex items-center gap-2 text-xs uppercase tracking-wider text-[#6b6b6b] hover:text-[#1a1a1a] transition-colors">
+                        <span>Newer</span>
+                        <span>&rarr;</span>
+                    </a>
+                @else
+                    <span></span>
+                @endif
+            </nav>
+        @endif
+
         {{-- Header: title left, cover art right --}}
         <div class="flex items-start gap-8">
             <div class="flex-1 min-w-0">
@@ -85,6 +110,32 @@
                                     <td class="px-4 py-3 text-[#6b6b6b] text-right tabular-nums">
                                         {{ $track->formatted_duration ?? '—' }}
                                     </td>
+                                    <td class="pr-4 py-3 w-28 text-right">
+                                        <div class="inline-flex items-center gap-2">
+                                            @if($track->is_highlighted)
+                                                <span class="text-[#e8590c]" title="Hot pick" aria-label="Hot pick">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                                                        <path d="M13.5 0.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14a8 8 0 1 0 16 0C20 9.9 18.04 6.24 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/>
+                                                    </svg>
+                                                </span>
+                                            @endif
+                                            <button
+                                                type="button"
+                                                x-data="trackHeart({{ $track->id }}, {{ $track->hearts_count }}, {{ in_array($track->id, $heartedTrackIds, true) ? 'true' : 'false' }})"
+                                                x-on:click.stop="toggle()"
+                                                :disabled="hearted || loading"
+                                                :class="hearted ? 'text-[#1da0c3]' : 'text-[#6b6b6b] hover:text-[#1a1a1a]'"
+                                                class="inline-flex items-center gap-1 text-xs tabular-nums transition-colors disabled:cursor-default"
+                                                :aria-pressed="hearted"
+                                                aria-label="Heart this track"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" :fill="hearted ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9Z"/>
+                                                </svg>
+                                                <span x-text="count"></span>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -102,7 +153,11 @@
                 <p class="text-[#6b6b6b] text-sm leading-relaxed">{{ $release->credits }}</p>
             </div>
         @endif
-    </div>
+
+        <div class="pt-10 border-t-2 border-[#1a1a1a]">
+            <h2 class="text-lg font-bold text-[#1a1a1a] mb-6 uppercase tracking-wider">Comments</h2>
+            <x-commenter::index :model="$release" />
+        </div>
     </div>
 
     {{-- Fixed Player Bar --}}
@@ -130,8 +185,40 @@
             </div>
         </div>
     </div>
+    </div>
 
     <script>
+        window.trackHeart = function (id, initialCount, initialHearted) {
+            return {
+                count: initialCount,
+                hearted: initialHearted,
+                loading: false,
+                async toggle() {
+                    if (this.hearted || this.loading) {
+                        return;
+                    }
+                    this.loading = true;
+                    try {
+                        const res = await fetch(`/tracks/${id}/heart`, {
+                            method: 'POST',
+                            headers: {
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            },
+                        });
+                        if (!res.ok) {
+                            return;
+                        }
+                        const data = await res.json();
+                        this.count = data.count;
+                        this.hearted = data.hearted;
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+            };
+        };
+
         const player = document.getElementById('player');
         const playerBar = document.getElementById('player-bar');
         const playerToggle = document.getElementById('player-toggle');

@@ -25,12 +25,16 @@ class Track extends Model
         'lyrics',
         'credits',
         'audio_asset_id',
+        'hearts_count',
+        'is_highlighted',
     ];
 
     protected function casts(): array
     {
         return [
             'duration_seconds' => 'integer',
+            'hearts_count' => 'integer',
+            'is_highlighted' => 'boolean',
         ];
     }
 

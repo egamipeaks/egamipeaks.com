@@ -14,3 +14,57 @@
     --color-accent: #1da0c3;
     --color-card: #ffffff;
 }
+
+/* SoundCloud-style overrides for lakm/laravel-comments */
+.lakm_commenter {
+    /* Strip the per-item card border + padding */
+    [x-ref^="comment"] {
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 0.5rem 0 !important;
+        background: transparent !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Subtle bottom divider between comments */
+    [x-ref^="comment"]:not(:last-child) {
+        border-bottom: 1px solid rgb(0 0 0 / 0.06) !important;
+    }
+
+    /* Compact avatar */
+    [x-ref^="comment"] img.rounded-full {
+        height: 1.75rem !important;
+        width: 1.75rem !important;
+    }
+
+    /* Hide the reaction manager block */
+    [wire\:id*="reaction-manager"],
+    livewire-reaction-manager {
+        display: none !important;
+    }
+
+    /* Hide the decorative gradient divider that sits above reactions */
+    [x-ref^="comment"] .bg-linear-to-r {
+        display: none !important;
+    }
+
+    /* Hover-reveal action menu (the vertical ellipsis kebab) */
+    [x-ref^="comment"] .relative.cursor-pointer {
+        opacity: 0;
+        transition: opacity 150ms ease;
+    }
+    [x-ref^="comment"]:hover .relative.cursor-pointer {
+        opacity: 1;
+    }
+
+    /* Tighter text */
+    [x-ref^="comment"] .p-1 {
+        padding: 0 !important;
+    }
+    [x-ref^="comment"] p {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+}
+

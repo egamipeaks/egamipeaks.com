@@ -11,11 +11,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use LakM\Commenter\Concerns\Commentable;
+use LakM\Commenter\Contracts\CommentableContract;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class Release extends Model
+class Release extends Model implements CommentableContract
 {
+    use Commentable;
+
     /** @use HasFactory<\Database\Factories\ReleaseFactory> */
     use HasFactory;
 
