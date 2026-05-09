@@ -11,7 +11,7 @@
 <div x-data="{ drawerOpen: false }" @keydown.escape.window="drawerOpen = false">
     <button type="button"
             @click="drawerOpen = true"
-            class="shrink-0 inline-flex items-center gap-2 px-3 py-2 border-2 border-[#1a1a1a] text-xs font-medium uppercase tracking-wider text-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition-colors">
+            class="cursor-pointer shrink-0 inline-flex items-center gap-2 px-3 py-2 border-2 border-ink bg-white text-ink text-xs font-medium uppercase tracking-wider transition-colors hover:bg-ink hover:text-white">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
         </svg>
@@ -39,7 +39,7 @@
             <h2 class="text-lg font-bold text-[#1a1a1a] uppercase tracking-wider">All Releases</h2>
             <button type="button"
                     @click="drawerOpen = false"
-                    class="w-8 h-8 flex items-center justify-center border-2 border-[#1a1a1a] hover:bg-[#1a1a1a] hover:text-white transition-colors"
+                    class="cursor-pointer w-8 h-8 flex items-center justify-center border-2 border-ink bg-white text-ink transition-colors hover:bg-ink hover:text-white"
                     aria-label="Close">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>

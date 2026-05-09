@@ -155,6 +155,12 @@
         @endif
 
         <div class="pt-10 border-t-2 border-[#1a1a1a]">
+            <h2 class="text-lg font-bold text-[#1a1a1a] mb-3 uppercase tracking-wider">Get notified</h2>
+            <p class="text-sm text-[#6b6b6b] mb-4">Subscribe to be the first to hear new releases.</p>
+            <livewire:subscribe-form />
+        </div>
+
+        <div class="pt-10 border-t-2 border-[#1a1a1a]">
             <h2 class="text-lg font-bold text-[#1a1a1a] mb-6 uppercase tracking-wider">Comments</h2>
             <x-commenter::index :model="$release" />
         </div>

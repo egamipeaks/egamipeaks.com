@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@hasSection('title') @yield('title') — {{ config('app.name') }} @else {{ config('app.name') }} @endif</title>
+    <title>@hasSection('title') @yield('title') — Egami Peaks | The Music of Andrew Krzynowek @else Egami Peaks | The Music of Andrew Krzynowek @endif</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=space-mono:400,700" rel="stylesheet">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -34,8 +34,19 @@
     </main>
 
     <footer class="border-t-2 border-[#1a1a1a] px-6 py-8 mt-16">
-        <div class="max-w-6xl mx-auto text-sm text-[#6b6b6b]">
-            &copy; {{ date('Y') }} {{ config('app.name') }}
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div class="md:max-w-md">
+                <h2 class="text-sm font-bold uppercase tracking-widest text-[#1a1a1a] mb-1">
+                    Get notified of new releases
+                </h2>
+                <p class="text-xs text-[#6b6b6b] mb-3">
+                    Drop your email and we'll let you know when something new drops. No spam.
+                </p>
+                <livewire:subscribe-form />
+            </div>
+            <div class="text-sm text-[#6b6b6b]">
+                &copy; {{ date('Y') }} {{ config('app.name') }}
+            </div>
         </div>
     </footer>
     @livewireScripts
