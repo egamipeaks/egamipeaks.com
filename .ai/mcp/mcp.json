@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "laravel-boost": {
+      "command": "/Users/akrzy/Library/Application Support/Herd/bin/php84",
+      "args": [
+        "/Users/akrzy/Dev/Herd/egamipeaks.com/artisan",
+        "boost:mcp"
+      ]
+    },
+    "herd": {
+      "command": "/Users/akrzy/Library/Application Support/Herd/bin/php84",
+      "args": [
+        "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
+      ],
+      "env": {
+        "SITE_PATH": "/Users/akrzy/Dev/Herd/egamipeaks.com"
+      }
+    }
+  }
+}
