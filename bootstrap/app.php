@@ -12,6 +12,9 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['hearted_tracks']);
+        $middleware->web(append: [
+            \App\Http\Middleware\RecordPageView::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

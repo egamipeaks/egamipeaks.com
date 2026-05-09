@@ -95,6 +95,7 @@
                                         data-audio-mime="{{ $track->audioAsset->mime }}"
                                         data-track-title="{{ $track->title }}"
                                         data-track-index="{{ $index }}"
+                                        data-track-id="{{ $track->id }}"
                                     @endif
                                 >
                                     <td class="px-4 py-3 w-8 tabular-nums">
@@ -237,6 +238,29 @@
         const iconPause = document.getElementById('icon-pause');
 
         let activeRow = null;
+        const PLAY_PING_THRESHOLD_SECONDS = 5;
+        const playPingedTrackIds = new Set();
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ?? '';
+
+        function maybePingPlay() {
+            if (!activeRow) return;
+            const trackId = activeRow.dataset.trackId;
+            if (!trackId || playPingedTrackIds.has(trackId)) return;
+            if (player.currentTime < PLAY_PING_THRESHOLD_SECONDS) return;
+
+            playPingedTrackIds.add(trackId);
+            fetch(`/tracks/${trackId}/play`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+                credentials: 'same-origin',
+                keepalive: true,
+            }).catch(() => {
+                playPingedTrackIds.delete(trackId);
+            });
+        }
 
         function formatTime(s) {
             if (!s || isNaN(s)) return '0:00';
@@ -317,6 +341,7 @@
             if (player.duration) {
                 playerSeek.value = (player.currentTime / player.duration) * 100;
             }
+            maybePingPlay();
         });
         player.addEventListener('loadedmetadata', () => {
             playerDuration.textContent = formatTime(player.duration);
